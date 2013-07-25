@@ -68,9 +68,30 @@ class AssocArrayMapperTest extends PHPUnit_Framework_TestCase
         $this->assertLessThan($array_mem * 0.01, $mapper_mem);
     }
 
-    public function testForeachSpeed()
+    public function testLoopSpeed()
     {
-        $large_array1 = array_fill(100, 200, 1);
+        $large_array1 = array_fill(1000, 2000, 1);
+
+        $start = microtime(true);
+        foreach ($large_array1 as $key => $v) {
+            $tmp = $v;
+        }
+        $foreach_array_elapsed_time = microtime(true) - $start;
+
+        $m = new AssocArrayMapper ('AssocArrayMapperUtil::identity', $large_array1);
+
+        $start = microtime(true);
+        foreach ($m as $key => $v) {
+            $tmp = $v;
+        }
+        $foreach_map_elapsed_time = microtime(true) - $start;
+
+        $this->assertLessThan($foreach_array_elapsed_time * 2, $foreach_map_elapsed_time);
+    }
+
+    public function testLookupSpeed()
+    {
+        $large_array1 = array_fill(1000, 2000, 1);
 
         $start = microtime(true);
         foreach ($large_array1 as $key => $v) {
@@ -81,7 +102,7 @@ class AssocArrayMapperTest extends PHPUnit_Framework_TestCase
         $m = new AssocArrayMapper ('AssocArrayMapperUtil::identity', $large_array1);
 
         $start = microtime(true);
-        foreach ($m as $key => $v) {
+        foreach ($large_array1 as $key => $v) {
             $tmp = $m[$key];
         }
         $foreach_map_elapsed_time = microtime(true) - $start;
