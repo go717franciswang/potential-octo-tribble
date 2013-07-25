@@ -33,7 +33,7 @@ Example usage
     iterator_to_array($m);
     # array('a' => -2, 'b' => -2);
 
-#Pass arrays as reference to 
+#Pass arrays as reference to reduce memory usage
     $mem_start = memory_get_usage();
     $large_array1 = array_fill(10000, 20000, 's1');
     $large_array2 = array_fill(10000, 20000, 's2');
