@@ -25,15 +25,12 @@ class AssocArrayMapper implements Iterator, ArrayAccess
 
     public function current()
     {
-        $key = $this->key();
-        return $this->offsetGet($key);
+        return $this[$this->key()];
     }
 
     public function key()
     {
-        $a = $this->arrays[0];
-        $b = &$a;
-        return key($b);
+        return key($this->arrays[0]);
     }
 
     public function next()
@@ -48,9 +45,7 @@ class AssocArrayMapper implements Iterator, ArrayAccess
 
     public function offsetExists($offset)
     {
-        $a = $this->arrays[0];
-        $b = &$a;
-        return isset($b[$offset]);
+        return isset($this->arrays[0][$offset]);
     }
 
     public function offsetGet($offset)

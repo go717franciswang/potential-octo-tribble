@@ -89,6 +89,30 @@ class AssocArrayMapperTest extends PHPUnit_Framework_TestCase
         $this->assertLessThan($foreach_array_elapsed_time * 2, $foreach_map_elapsed_time);
     }
 
+    public function testLoopSpeedOnStringKeys()
+    {
+        $large_array1 = array();
+        for ($i = 10000; $i < 20000; $i++) {
+            $large_array1["abc{$i}def"] = 1;
+        }
+
+        $start = microtime(true);
+        foreach ($large_array1 as $key => $v) {
+            $tmp = $v;
+        }
+        $foreach_array_elapsed_time = microtime(true) - $start;
+
+        $m = new AssocArrayMapper ('AssocArrayMapperUtil::identity', $large_array1);
+
+        $start = microtime(true);
+        foreach ($m as $key => $v) {
+            $tmp = $v;
+        }
+        $foreach_map_elapsed_time = microtime(true) - $start;
+
+        $this->assertLessThan($foreach_array_elapsed_time * 2, $foreach_map_elapsed_time);
+    }
+
     public function testLookupSpeed()
     {
         $large_array1 = array_fill(10000, 20000, 1);
@@ -104,6 +128,83 @@ class AssocArrayMapperTest extends PHPUnit_Framework_TestCase
         $start = microtime(true);
         foreach ($large_array1 as $key => $v) {
             $tmp = $m[$key];
+        }
+        $foreach_map_elapsed_time = microtime(true) - $start;
+
+        $this->assertLessThan($foreach_array_elapsed_time * 3, $foreach_map_elapsed_time);
+    }
+
+    public function testLookupSpeedNested()
+    {
+        $large_array1 = array_fill(10000, 20000, 1);
+        $large_array2 = array_fill(10000, 20000, 1);
+
+        $start = microtime(true);
+        foreach ($large_array1 as $key => $v) {
+            $negative = call_user_func_array('AssocArrayMapperUtil::negate', array($large_array2[$key]));
+            $tmp = call_user_func_array('AssocArrayMapperUtil::sum', array($negative, $large_array1[$key]));
+        }
+        $foreach_array_elapsed_time = microtime(true) - $start;
+
+        $negatives = new AssocArrayMapper('AssocArrayMapperUtil::negate', $large_array2);
+        $m = new AssocArrayMapper('AssocArrayMapperUtil::sum', $large_array1, $negatives);
+
+        $start = microtime(true);
+        foreach ($large_array1 as $key => $v) {
+            $tmp = $m[$key];
+        }
+        $foreach_map_elapsed_time = microtime(true) - $start;
+
+        $this->assertLessThan($foreach_array_elapsed_time * 3, $foreach_map_elapsed_time);
+    }
+
+    public function testOffsetExistsSpeed()
+    {
+        $large_array1 = array_fill(10000, 20000, 1);
+
+        $start = microtime(true);
+        foreach ($large_array1 as $key => $v) {
+            if (isset($large_array1[$key])) {
+                $tmp = call_user_func_array('AssocArrayMapperUtil::null', array($large_array1[$key]));
+            }
+        }
+        $foreach_array_elapsed_time = microtime(true) - $start;
+
+        $m = new AssocArrayMapper ('AssocArrayMapperUtil::null', $large_array1);
+
+        $start = microtime(true);
+        foreach ($large_array1 as $key => $v) {
+            if (isset($m[$key])) {
+                $tmp = $m[$key];
+            }
+        }
+        $foreach_map_elapsed_time = microtime(true) - $start;
+
+        $this->assertLessThan($foreach_array_elapsed_time * 3, $foreach_map_elapsed_time);
+    }
+
+    public function testOffsetExistsNested()
+    {
+        $large_array1 = array_fill(10000, 20000, 1);
+        $large_array2 = array_fill(10000, 20000, 1);
+
+        $start = microtime(true);
+        foreach ($large_array1 as $key => $v) {
+            if (isset($large_array1[$key])) {
+                $negative = call_user_func_array('AssocArrayMapperUtil::negate', array($large_array2[$key]));
+                $tmp = call_user_func_array('AssocArrayMapperUtil::sum', array($negative, $large_array1[$key]));
+            }
+        }
+        $foreach_array_elapsed_time = microtime(true) - $start;
+
+        $negatives = new AssocArrayMapper('AssocArrayMapperUtil::negate', $large_array2);
+        $m = new AssocArrayMapper('AssocArrayMapperUtil::sum', $large_array1, $negatives);
+
+        $start = microtime(true);
+        foreach ($large_array1 as $key => $v) {
+            if (isset($m[$key])) {
+                $tmp = $m[$key];
+            }
         }
         $foreach_map_elapsed_time = microtime(true) - $start;
 
