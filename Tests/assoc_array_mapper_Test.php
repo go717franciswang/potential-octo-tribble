@@ -107,6 +107,6 @@ class AssocArrayMapperTest extends PHPUnit_Framework_TestCase
         }
         $foreach_map_elapsed_time = microtime(true) - $start;
 
-        $this->assertLessThan($foreach_array_elapsed_time * 2, $foreach_map_elapsed_time);
+        $this->assertLessThan($foreach_array_elapsed_time * 3, $foreach_map_elapsed_time);
     }
 }

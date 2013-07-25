@@ -1,6 +1,6 @@
 <?php
 
-require_once 'assoc_array_mapper.php';
+require_once dirname(__FILE__) . '/../assoc_array_mapper.php';
 
 $a = array('a' => 1, 'b' => 2);
 $b = array('a' => 3, 'b' => 4);
