@@ -1,7 +1,6 @@
 <?php
 
 require_once dirname(__FILE__) . "/../assoc_array_mapper.php";
-require_once dirname(__FILE__) . "/../assoc_array_mapper_util.php";
 
 class AssocArrayMapperTest extends PHPUnit_Framework_TestCase
 {
