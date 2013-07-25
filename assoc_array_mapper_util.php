@@ -31,4 +31,8 @@ class AssocArrayMapperUtil
     {
         return $x;
     }
+
+    public static function null()
+    {
+    }
 }
