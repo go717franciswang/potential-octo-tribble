@@ -60,11 +60,32 @@ class AssocArrayMapperTest extends PHPUnit_Framework_TestCase
         $mem_create_array = memory_get_usage();
         $array_mem = $mem_create_array - $mem_start;
 
-        $negatives = new AssocArrayMapper('AssocArrayMapperUtil::negate', &$large_array2);
-        $m = new AssocArrayMapper('AssocArrayMapperUtil::sum', &$large_array1, $negatives);
+        $negatives = new AssocArrayMapper('AssocArrayMapperUtil::negate', $large_array2);
+        $m = new AssocArrayMapper('AssocArrayMapperUtil::sum', $large_array1, $negatives);
         $mem_create_mapper = memory_get_usage();
         $mapper_mem = $mem_create_mapper - $mem_create_array;
 
         $this->assertLessThan($array_mem * 0.01, $mapper_mem);
+    }
+
+    public function testForeachSpeed()
+    {
+        $large_array1 = array_fill(100, 200, 1);
+
+        $start = microtime(true);
+        foreach ($large_array1 as $key => $v) {
+            $tmp = $large_array1[$key];
+        }
+        $foreach_array_elapsed_time = microtime(true) - $start;
+
+        $m = new AssocArrayMapper ('AssocArrayMapperUtil::identity', $large_array1);
+
+        $start = microtime(true);
+        foreach ($m as $key => $v) {
+            $tmp = $m[$key];
+        }
+        $foreach_map_elapsed_time = microtime(true) - $start;
+
+        $this->assertLessThan($foreach_array_elapsed_time * 2, $foreach_map_elapsed_time);
     }
 }
