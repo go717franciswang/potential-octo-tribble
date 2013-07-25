@@ -19,7 +19,8 @@ class AssocArrayMapper implements Iterator, ArrayAccess
     public function rewind()
     {
         $a = $this->arrays[0];
-        return reset(&$a);
+        $b = &$a;
+        return reset($b);
     }
 
     public function current()
@@ -31,7 +32,8 @@ class AssocArrayMapper implements Iterator, ArrayAccess
     public function key()
     {
         $a = $this->arrays[0];
-        return key(&$a);
+        $b = &$a;
+        return key($b);
     }
 
     public function next()
