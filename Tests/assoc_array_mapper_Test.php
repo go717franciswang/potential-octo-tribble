@@ -45,7 +45,7 @@ class AssocArrayMapperTest extends PHPUnit_Framework_TestCase
         $mem_create_array = memory_get_usage();
         $array_mem = $mem_create_array - $mem_start;
 
-        $m = new AssocArrayMapper('AssocArrayMapperUtil::concat', &$large_array1, &$large_array2);
+        $m = new AssocArrayMapper('AssocArrayMapperUtil::concat', $large_array1, $large_array2);
         $mem_create_mapper = memory_get_usage();
         $mapper_mem = $mem_create_mapper - $mem_create_array;
 

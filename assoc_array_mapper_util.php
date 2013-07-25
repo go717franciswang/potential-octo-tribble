@@ -12,6 +12,11 @@ class AssocArrayMapperUtil
         return -$x;
     }
 
+    public function product()
+    {
+        return array_product(func_get_args());
+    }
+
     public static function concat()
     {
         return implode('', func_get_args());

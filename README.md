@@ -2,18 +2,15 @@ Example usage
 -------------
 
 #Syntax
-    # member arrays are copied
     $m = new AssocArrayMapper($func_callback, $arr1, $arr2, ..);
-
-    # member arrays are stored as reference
-    $m = new AssocArrayMapper($func_callback, &$arr1, &$arr2, ..);
+    # up to $arr10. Have not found a way to pass unlimited number args by reference
 
 #Simple mapping
     $a = array('a' => 1, 'b' => 2);
     $b = array('a' => 3, 'b' => 4);
     $c = array('a' => 5, 'b' => 6);
 
-    $m = new AssocArrayMapper('AssocArrayMapperUtil::sum', &$a, &$b, &$c); 
+    $m = new AssocArrayMapper('AssocArrayMapperUtil::sum', $a, $b, $c); 
     echo $m['a'];
     # 9;
 
@@ -40,7 +37,7 @@ Example usage
     $mem_create_array = memory_get_usage();
     $array_mem = $mem_create_array - $mem_start;
 
-    $m = new AssocArrayMapper('AssocArrayMapperUtil::concat', &$large_array1, &$large_array2);
+    $m = new AssocArrayMapper('AssocArrayMapperUtil::concat', $large_array1, $large_array2);
     $mem_create_mapper = memory_get_usage();
     $mapper_mem = $mem_create_mapper - $mem_create_array;
 

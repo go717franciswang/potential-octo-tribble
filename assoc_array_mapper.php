@@ -3,12 +3,17 @@ require_once dirname(__FILE__) . '/assoc_array_mapper_util.php';
 
 class AssocArrayMapper implements Iterator, ArrayAccess
 {
-    public function __construct(/*variable arguments*/)
+    public function __construct($callback, 
+        &$a1=null, &$a2=null, &$a3=null, &$a4=null, &$a5=null, 
+        &$a6=null, &$a7=null, &$a8=null, &$a9=null, &$a10=null)
     {
-        $stack = debug_backtrace();
-        $args = $stack[0]['args'];
-        $this->func = $args[0];
-        $this->arrays = array_slice($args,1);
+        $this->func = $callback;
+        $this->arrays = array();
+        $argc = func_num_args();
+        for ($i = 1; $i < $argc; $i++) {
+            $name = 'a'.$i;
+            $this->arrays[] = &$$name;
+        }
     }
 
     public function rewind()
